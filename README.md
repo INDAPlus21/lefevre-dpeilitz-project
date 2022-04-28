@@ -1,4 +1,12 @@
 # lefevre-dpeilitz-project
-## Idéer
-bot till ett pvp-spel (som suger i början och långsamt lär sig av motståndaren?) 9/10 9/10
-Vi kommer att använda githubs trello rip-off
+*Varje del i projektet bortom del 1 är endast aktuella om tid finns*
+
+## Projekt pt. 1
+Gör ett Pac-Man i pygame
+
+## Projekt pt. 2
+Träna ett Neural Network att styra bli bäst på spelet (alltså genom att styra Pac-Man). 
+Vårt NN ska troligen (om ingen bättre plan dyker upp) göras i Python med Numpy. 
+
+## Projekt pt. 3
+Träna Neural Networks till spökena och gör dem oslagbara. 
