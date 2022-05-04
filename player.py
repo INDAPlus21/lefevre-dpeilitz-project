@@ -19,13 +19,29 @@ class Player:
     def update(self):
         # Check collisions
         #if self.collision() == true:
+        if self.pxl_pos == self.grid_position:
+            if self.direction.x == 1 or self.direction.y == 1:
+                self.pxl_pos += self.direction*self.speed
+                self.grid_position = vec((self.pxl_pos.x - TILELENGTH / 2) // TILELENGTH , (self.pxl_pos.y - TILELENGTH / 2) // TILELENGTH)
+                print(self.grid_position)
+                direction = self.get_keypress(self.direction)
+                self.direction = direction
 
-        self.pxl_pos += self.direction*self.speed
-        self.grid_position = vec((self.pxl_pos.x - TILELENGTH / 2) // TILELENGTH , (self.pxl_pos.y - TILELENGTH / 2) // TILELENGTH)
-        print(self.grid_position)
-        direction = self.get_keypress(self.direction)
-        self.direction = direction
-        self.move()
+            else:
+                self.pxl_pos += self.direction*self.speed
+                self.grid_position = vec((self.pxl_pos.x + TILELENGTH / 2) // TILELENGTH , (self.pxl_pos.y + TILELENGTH / 2) // TILELENGTH)
+                print(self.grid_position)
+                direction = self.get_keypress(self.direction)
+                self.direction = direction
+
+        else: 
+            self.pxl_pos += self.direction*self.speed
+            self.grid_position = vec((self.pxl_pos.x - TILELENGTH / 2) // TILELENGTH , (self.pxl_pos.y - TILELENGTH / 2) // TILELENGTH)
+            print(self.grid_position)
+            direction = self.get_keypress(self.direction)
+            self.direction = direction
+        self.move_grid()
+
 
     def get_keypress(self, prev_dir):
         key_pressed = pygame.key.get_pressed()
@@ -46,13 +62,15 @@ class Player:
         pygame.draw.circle(screen, self.color, p, self.radius)
         self.collision()
 
-    def move(self):
+    def move_grid(self):
         if self.prev_pos != self.grid_position:
+            
             xval = int(self.prev_pos.x)
             yval = int(self.prev_pos.y)
             self.grid[yval][xval] = 0
             self.grid[int(self.grid_position.y)][int(self.grid_position.x)] = 2
             self.prev_pos = self.grid_position
+
 
     #check the tile pacman is currently on is a wall, returns false otherwise
     def collision(self):
