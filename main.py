@@ -1,13 +1,14 @@
 import pygame
 from constants import *
 from player import Player
+vec = pygame.math.Vector2
+
 
 # PAC_MAN = pygame.image.load(os.path.join('Assets', 'pacman.png')) TODO
 # BLUE_GHOST = pygame.image.load(os.path.join('Assets', 'blueghost.png')) TODO
 # RED_GHOST = pygame.image.load(os.path.join('Assets', 'redghost.png')) TODO
 # ORANGE_GHOST = pygame.image.load(os.path.join('Assets', 'orangeghost.png')) TODO
 # PINK_GHOST = pygame.image.load(os.path.join('Assets', 'pinkghost.png')) TODO
-
 
 class Pacman(object):
     def __init__(self):
@@ -17,8 +18,8 @@ class Pacman(object):
         self.clock = pygame.time.Clock()
         self.running = True
         self.grid  = [
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -47,15 +48,15 @@ class Pacman(object):
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             
         ]
-        self.player = Player(self.grid)
+        self.player = Player(self.grid, self.init_pacman())
 
     def run(self):
         while self.running:
@@ -70,10 +71,18 @@ class Pacman(object):
 
     def startGame(self):
         self.setBackground()
+    
+    def init_pacman(self):
+        for x in range(COLS):
+            for y in range(ROWS):
+                if self.grid[y][x] == 2:
+                    return vec(y, x)
+                
 
     def update(self):
         self.clock.tick(FPS)
         self.player.update()
+        self.grid = self.player.grid
         self.checkEvents()
         self.render()
 
@@ -96,7 +105,10 @@ class Pacman(object):
                                 TILELENGTH, TILELENGTH), 1)
                 if self.grid[y][x] == 1:
                     pygame.draw.rect(self.screen, BLUE, (x*TILELENGTH, y*TILELENGTH,
-                                TILELENGTH, TILELENGTH))   
+                                TILELENGTH, TILELENGTH))
+                if self.grid[y][x] == 2:
+                    pygame.draw.rect(self.screen, RED, (x*TILELENGTH, y*TILELENGTH,
+                                TILELENGTH, TILELENGTH), 1)  
 
 
 
