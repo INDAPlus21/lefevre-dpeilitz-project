@@ -19,4 +19,6 @@ BLUE = (0, 0, 255)
 
 # OTHER
 
-PACMAN = 0
+PACMAN = 2
+CANDY = 3
+SUPER_CANDY = 4

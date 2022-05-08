@@ -14,6 +14,7 @@ class Player:
         self.radius = 8
         self.color = YELLOW
         self.stored_direction = None
+        self.score = 0
 
     def update(self):
         self.pxl_pos += self.direction*self.speed           
@@ -29,17 +30,14 @@ class Player:
             self.stored_direction = direction
 
         if self.stored_direction != None :
-            print("Not")
             if self.collision(self.stored_direction) == False:
                 self.direction = self.stored_direction
                 self.stored_direction = None
-                print("this")
         else:
             self.direction = direction
             
         if self.collision(self.direction):
             self.direction = vec(0,0)
-            print("wat")
 
 
     def get_keypress(self, prev_dir):
@@ -64,6 +62,12 @@ class Player:
             
             xval = int(self.prev_pos.x)
             yval = int(self.prev_pos.y)
+
+            #Score points 
+            if self.grid[int(self.grid_position.y)][int(self.grid_position.x)] == 3:
+                self.score += 10
+                print(self.score)
+            
             self.grid[yval][xval] = 0
             self.grid[int(self.grid_position.y)][int(self.grid_position.x)] = 2
             self.prev_pos = self.grid_position
