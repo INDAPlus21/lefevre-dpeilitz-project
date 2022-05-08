@@ -7,40 +7,39 @@ class Player:
         self.grid = grid
         self.grid_position = pos
         self.prev_pos = pos
-        self.pxl_pos = vec(self.grid_position.y * TILELENGTH, self.grid_position.x * TILELENGTH + TILELENGTH / 2)
-        self.pxl_pos.x += TILELENGTH/2
-        print(self.pxl_pos)
-        self.direction = vec(0, 1)
+        self.pxl_pos = vec(self.grid_position.y * TILELENGTH, self.grid_position.x * TILELENGTH)
+        print(self.pxl_pos / TILELENGTH)
+        self.direction = vec(-1, 0)
         self.speed = 1
         self.radius = 8
         self.color = YELLOW
         self.stored_direction = None
 
     def update(self):
-        # Check collisions
-        #if self.collision() == true:
-        if self.pxl_pos == self.grid_position:
-            if self.direction.x == 1 or self.direction.y == 1:
-                self.pxl_pos += self.direction*self.speed
-                self.grid_position = vec((self.pxl_pos.x - TILELENGTH / 2) // TILELENGTH , (self.pxl_pos.y - TILELENGTH / 2) // TILELENGTH)
-                print(self.grid_position)
-                direction = self.get_keypress(self.direction)
-                self.direction = direction
-
-            else:
-                self.pxl_pos += self.direction*self.speed
-                self.grid_position = vec((self.pxl_pos.x + TILELENGTH / 2) // TILELENGTH , (self.pxl_pos.y + TILELENGTH / 2) // TILELENGTH)
-                print(self.grid_position)
-                direction = self.get_keypress(self.direction)
-                self.direction = direction
-
-        else: 
-            self.pxl_pos += self.direction*self.speed
-            self.grid_position = vec((self.pxl_pos.x - TILELENGTH / 2) // TILELENGTH , (self.pxl_pos.y - TILELENGTH / 2) // TILELENGTH)
-            print(self.grid_position)
-            direction = self.get_keypress(self.direction)
-            self.direction = direction
+        self.pxl_pos += self.direction*self.speed           
+        self.grid_position = vec((self.pxl_pos.x + TILELENGTH / 2) // TILELENGTH  , (self.pxl_pos.y + TILELENGTH / 2) // TILELENGTH)
         self.move_grid()
+        #print(self.pxl_pos / TILELENGTH)
+
+
+        direction = self.get_keypress(self.direction)
+
+        #Collision handling 
+        if self.collision(direction) and direction != self.direction:
+            self.stored_direction = direction
+
+        if self.stored_direction != None :
+            print("Not")
+            if self.collision(self.stored_direction) == False:
+                self.direction = self.stored_direction
+                self.stored_direction = None
+                print("this")
+        else:
+            self.direction = direction
+            
+        if self.collision(self.direction):
+            self.direction = vec(0,0)
+            print("wat")
 
 
     def get_keypress(self, prev_dir):
@@ -54,13 +53,11 @@ class Player:
         elif key_pressed[pygame.K_RIGHT]:
             return vec(1, 0)
         else: 
-            return vec(0, 0)
-            #return prev_dir
+            return prev_dir
 
     def render(self, screen):
-        p = self.pxl_pos
+        p = (self.pxl_pos.x + TILELENGTH / 2, self.pxl_pos.y + TILELENGTH / 2)
         pygame.draw.circle(screen, self.color, p, self.radius)
-        self.collision()
 
     def move_grid(self):
         if self.prev_pos != self.grid_position:
@@ -73,12 +70,11 @@ class Player:
 
 
     #check the tile pacman is currently on is a wall, returns false otherwise
-    def collision(self):
-         xval = int(self.grid_position.x + self.direction.x)
-         yval = int(self.grid_position.y + self.direction.y)
+    def collision(self, dir):
+         xval = int(self.grid_position.x + dir.x)
+         yval = int(self.grid_position.y + dir.y)
          if self.grid[yval][xval] == 1:
-            print("HEUREKA")
-            self.direction = vec(0, 0)
+
             return True
          else:
             return False
