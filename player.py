@@ -17,8 +17,12 @@ class Player:
         self.score = 0
 
     def update(self):
-        self.pxl_pos += self.direction*self.speed           
-        self.grid_position = vec((self.pxl_pos.x + TILELENGTH / 2) // TILELENGTH  , (self.pxl_pos.y + TILELENGTH / 2) // TILELENGTH)
+        self.pxl_pos += self.direction*self.speed    
+        if self.direction == (0,1) or self.direction == (1,0):
+            self.grid_position = vec((self.pxl_pos.x) // TILELENGTH  , (self.pxl_pos.y) // TILELENGTH)
+
+        if self.direction == (0,-1) or self.direction == (-1,0):
+            self.grid_position = vec((self.pxl_pos.x+ TILELENGTH / 2) // TILELENGTH  , (self.pxl_pos.y + TILELENGTH / 2) // TILELENGTH)
         self.move_grid()
         #print(self.pxl_pos / TILELENGTH)
 
@@ -67,6 +71,8 @@ class Player:
             if self.grid[int(self.grid_position.y)][int(self.grid_position.x)] == 3:
                 self.score += 10
                 print(self.score)
+            if self.grid[int(self.grid_position.y)][int(self.grid_position.x)] == 4:
+                self.score += 50
             
             self.grid[yval][xval] = 0
             self.grid[int(self.grid_position.y)][int(self.grid_position.x)] = 2
