@@ -1,15 +1,14 @@
 import pygame
 from constants import *
 from player import Player
+vec = pygame.math.Vector2
+
 
 # PAC_MAN = pygame.image.load(os.path.join('Assets', 'pacman.png')) TODO
 # BLUE_GHOST = pygame.image.load(os.path.join('Assets', 'blueghost.png')) TODO
 # RED_GHOST = pygame.image.load(os.path.join('Assets', 'redghost.png')) TODO
 # ORANGE_GHOST = pygame.image.load(os.path.join('Assets', 'orangeghost.png')) TODO
 # PINK_GHOST = pygame.image.load(os.path.join('Assets', 'pinkghost.png')) TODO
-
-# Gameboard representation 13x13
-
 
 class Pacman(object):
     def __init__(self):
@@ -18,7 +17,40 @@ class Pacman(object):
         self.background = None
         self.clock = pygame.time.Clock()
         self.running = True
-        self.player = Player()
+        self.grid  = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1],
+            [1, 3, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 3, 1],
+            [1, 3, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 3, 1],
+            [1, 3, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 3, 1],
+            [1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1],
+            [1, 3, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 3, 1],
+            [1, 3, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 3, 1],
+            [1, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 1],
+            [1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1],
+            [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+            [1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1],
+            [1, 3, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1],
+            [1, 3, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 3, 1],
+            [1, 3, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 3, 1],
+            [1, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 1],
+            [1, 1, 1, 3, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 3, 1, 1, 1],
+            [1, 1, 1, 3, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 3, 1, 1, 1],
+            [1, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 1],
+            [1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1],
+            [1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1],
+            [1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ]
+        self.player = Player(self.grid, self.init_pacman())
 
     def run(self):
         while self.running:
@@ -33,10 +65,18 @@ class Pacman(object):
 
     def startGame(self):
         self.setBackground()
+    
+    def init_pacman(self):
+        for x in range(COLS):
+            for y in range(ROWS):
+                if self.grid[y][x] == 2:
+                    return vec(y, x)
+                
 
     def update(self):
         self.clock.tick(FPS)
         self.player.update()
+        self.grid = self.player.grid
         self.checkEvents()
         self.render()
 
@@ -48,16 +88,25 @@ class Pacman(object):
     def render(self):
         self.screen.blit(self.background, (0, 0))
         self.player.render(self.screen)
-        pygame.display.update()
         self.draw_grid()
+
+        pygame.display.update()
 
     def draw_grid(self):
         for x in range(COLS):
-            pygame.draw.line(self.screen, YELLOW, (x*TILELENGTH, 0),
-                             (x*TILELENGTH, SCREENHEIGHT))
-        for y in range(ROWS):
-            pygame.draw.line(self.screen, YELLOW, (0, y*TILELENGTH),
-                             (SCREENWIDTH, y*TILELENGTH))
+            for y in range(ROWS):
+                pygame.draw.rect(self.screen, GREY, (x*TILELENGTH, y*TILELENGTH,
+                                TILELENGTH, TILELENGTH), 1)
+                if self.grid[y][x] == 1:
+                    pygame.draw.rect(self.screen, BLUE, (x*TILELENGTH, y*TILELENGTH,
+                                TILELENGTH, TILELENGTH))
+                if self.grid[y][x] == 2:
+                    pygame.draw.rect(self.screen, RED, (x*TILELENGTH, y*TILELENGTH,
+                                TILELENGTH, TILELENGTH), 1)
+                # Draw Candy
+                if self.grid[y][x] == 3:
+                    pygame.draw.circle(self.screen, WHITE, (x*TILELENGTH + TILELENGTH/2, y*TILELENGTH + TILELENGTH/2), TILELENGTH / 6)
+
 
 
 if __name__ == "__main__":
