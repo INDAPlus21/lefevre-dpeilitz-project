@@ -39,7 +39,7 @@ grid = [
     [0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
     [1, 1, 1, 0, 1, 1, 1, 1, 1, 0],
     [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-    [0, 1, 1, 0, 1, 0, 0, 0, 0, 0],
+    [0, 1, 1, 1, 1, 0, 0, 0, 0, 0],
     [0, 1, 0, 0, 0, 0, 1, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
     [1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
@@ -90,36 +90,40 @@ def get_adjacents(node_grid: list[list[Node]], cord):
 
 # Goes through all nodes in the node_grid with pick_state = 1 and picks the one with lowest f_cost
 def find_node(node_grid: list[list[Node]]):
-    lowest_cord = (0, 0)
-    lowest_fcost = []
+    lowest_cost = 10000
+    lowest_fcords = []
+
     for y in range(len(node_grid)):
         for x in range(len(node_grid[0])):
             if node_grid[x][y].pick_state == 1:
-                if node_grid[x][y].f_cost < node_grid[lowest_cord[0]][lowest_cord[1]].f_cost:
-                    lowest_fcost.clear()
-                    lowest_fcost.append((x, y))
-                elif node_grid[x][y].f_cost == node_grid[lowest_cord[0]][lowest_cord[1]].f_cost:
-                    lowest_fcost.append((x, y))
+                if node_grid[x][y].f_cost < lowest_cost:
+                    lowest_fcords.clear()
+                    lowest_fcords.append((x, y))
+                    lowest_cost = node_grid[x][y].f_cost
+                elif node_grid[x][y].f_cost == lowest_cost:
+                    lowest_fcords.append((x, y))
     
-    lowest_hcost = []
-    lowest_cord = lowest_fcost[0]
-    lowest_hcost.append(lowest_fcost[0])
-    for i in range(1, len(lowest_fcost)):
-        if node_grid[lowest_cord[0][0]][lowest_cord[0][1]].h_cost < node_grid[lowest_cord[i][0]][lowest_cord[i][1]].h_cost:
-            lowest_hcost.clear()
-            lowest_hcost.append(lowest_cord[i])
-        elif node_grid[lowest_cord[0][0]][lowest_cord[0][1]].h_cost < node_grid[lowest_cord[i][0]][lowest_cord[i][1]].h_cost:
-            lowest_hcost.append(lowest_cord[i])
+    lowest_hcords = []
+    lowest_hcords.append(lowest_fcords[0])
+    lowest_cost = node_grid[lowest_hcords[0][0]][lowest_hcords[0][1]].h_cost
+
+    for i in range(1, len(lowest_fcords)):
+        if lowest_cost < node_grid[lowest_fcords[i][0]][lowest_fcords[i][1]].h_cost:
+            lowest_hcords.clear()
+            lowest_hcords.append(lowest_fcords[i])
+            lowest_cost = node_grid[lowest_fcords[i][0]][lowest_fcords[i][1]].h_cost
+        elif lowest_cost < node_grid[lowest_fcords[i][0]][lowest_fcords[i][1]].h_cost:
+            lowest_hcords.append(lowest_fcords[i])
     
-    return lowest_hcost[0]
+    return lowest_hcords[0]
         
 
 
 # Draws the newfound path on the original grid with 2's
-def draw_path(grid: list[list[int]], node_grid: list[list[Node]]):
-    while node_grid[cur_cord[0]][cur_cord[1]].activator != cur_cord:
-        cur_cord = node_grid[cur_cord[0]][cur_cord[1]].activator
-        grid[cur_cord[0]][cur_cord[1]] = 2
+def draw_path(grid: list[list[int]], node_grid: list[list[Node]], target_cord: tuple[int, int]):
+    while node_grid[target_cord[0]][target_cord[1]].activator != target_cord:
+        target_cord = node_grid[target_cord[0]][target_cord[1]].activator
+        grid[target_cord[0]][target_cord[1]] = 2
 
     return grid
 
@@ -139,6 +143,9 @@ def find_path(grid: list[list[int]], a_cord: tuple[int, int], b_cord: tuple[int,
     while cur_cord != b_cord:
         print("Nuvarande koordinater: " + str(cur_cord))
         
+        # Set current node to unpickable
+        node_grid[cur_cord[0]][cur_cord[1]].pick_state = 2
+
         # Find movable adjacent nodes, returns tuple
         adj = get_adjacents(node_grid, cur_cord)
 
@@ -151,9 +158,7 @@ def find_path(grid: list[list[int]], a_cord: tuple[int, int], b_cord: tuple[int,
         # Find the node on the grid that has the lowest f_cost, and as a tie breaker h_cost
         cur_cord = find_node(node_grid)
 
-        hej = input()
-
-    #grid = draw_path(grid, node_grid)
+    grid = draw_path(grid, node_grid, cur_cord)
 
     return grid
 
