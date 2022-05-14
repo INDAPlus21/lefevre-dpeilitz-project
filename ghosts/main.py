@@ -1,48 +1,18 @@
 import pygame
+Vec2 = pygame.math.Vector2
+from node import Node
+from const import *
 
-# The node class
-class Node:
-    def __init__(self, passable: bool):
-        self.passable = passable
-        self.g_cost = 1000
-        self.h_cost = 1000
-        self.f_cost = 1000
-        # pick_state: 0 = inte uppdaterad, 1 = uppdaterad och pickable, 2 = redan använd
-        self.pick_state = 0
-        
-    def update(self, gcost: int, hcost: int, activator: tuple[int, int]):
-        # Check if most efficient path from point a before changing the g_cost
-        if self.g_cost > gcost:
-            self.g_cost = gcost
-            self.activator = activator
-        # Set h_cost to distance to point b
-        self.h_cost = hcost
-        # The f_cost, a node's rating so to speak, is the sum of the g_cost and the h_cost
-        self.f_cost = gcost + hcost
-        # Check if node has been picked previously before making it pickable
-        if self.pick_state != 2:
-            self.pick_state = 1
-        print(self.g_cost, self.h_cost, self.f_cost)
-
-
-# Initialize constants
-SCREENSIZE = (500, 500)
-BOXSIZE = 50;
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-YELLOW = (255, 255, 0)
 
 grid = [
     [9, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
-    [1, 1, 1, 0, 1, 1, 1, 1, 1, 0],
+    [0, 1, 1, 0, 1, 1, 1, 1, 1, 0],
     [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-    [0, 1, 1, 1, 1, 0, 0, 0, 0, 0],
-    [0, 1, 0, 0, 0, 0, 1, 0, 0, 0],
+    [0, 1, 1, 0, 1, 0, 0, 0, 0, 0],
+    [1, 1, 0, 0, 0, 0, 1, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-    [1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+    [0, 1, 1, 1, 1, 1, 1, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [8, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
@@ -55,7 +25,7 @@ pygame.init()
 screen = pygame.display.set_mode((500, 500))
 background = pygame.surface.Surface(SCREENSIZE).convert()
 background.fill(WHITE)
-            
+
 # Calculates the distance between two points on the grid (diagonal paths not allowed)
 def calc_dist_to_point(a_cord: tuple[int, int], b_cord: tuple[int, int]):
     x_diff = abs(a_cord[0] - b_cord[0])
@@ -141,15 +111,12 @@ def find_path(grid: list[list[int]], a_cord: tuple[int, int], b_cord: tuple[int,
 
     # Run loop until destination is reached
     while cur_cord != b_cord:
-        print("Nuvarande koordinater: " + str(cur_cord))
         
         # Set current node to unpickable
         node_grid[cur_cord[0]][cur_cord[1]].pick_state = 2
 
         # Find movable adjacent nodes, returns tuple
-        adj = get_adjacents(node_grid, cur_cord)
-
-        print("Adjacents: " + str(adj))        
+        adj = get_adjacents(node_grid, cur_cord)  
 
         cur_node = node_grid[cur_cord[0]][cur_cord[1]]
         for i in range(len(adj)):
