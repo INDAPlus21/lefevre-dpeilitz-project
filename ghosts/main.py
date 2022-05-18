@@ -50,6 +50,9 @@ path = pf.find_path(Vec2Int(0, 9), Vec2Int(0, 0))
 for i in range(len(path)):
     grid[path[i].y][path[i].x] = 2
 
+vec1 = Vec2Int(1, 1)
+vec2 = Vec2Int(2, 0)
+
 # Start game loop
 running = True
 while running:

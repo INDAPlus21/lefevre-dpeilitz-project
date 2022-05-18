@@ -1,5 +1,5 @@
-from node_grid import Node_grid
-from vec2int import Vec2Int
+from ghosts.node_grid import Node_grid
+from ghosts.vec2int import Vec2Int
 
 class Pathfinder:
     def __init__(self, grid: list[list[int]]):
@@ -28,7 +28,10 @@ class Pathfinder:
             # Find the node on the grid that has the lowest fcost, and as a tie breaker hcost
             curr_pos = self.find_best_node()
 
-        return self.backtrack_path(target_pos)
+        path = self.backtrack_path(target_pos)
+        self.node_grid.clear()
+
+        return path
 
 
     # Helper methods
@@ -74,19 +77,21 @@ class Pathfinder:
     def find_lowest_fcost(self):
         lowest_cost = 10000
         lowest_fcords = []
+        test = []
 
         for y in range(self.node_grid.height):
             for x in range(self.node_grid.width):
                 curr_pos = Vec2Int(x, y)
                 curr_node = self.node_grid.get_node(curr_pos)
                 if curr_node.pick_state == 1:
+                    test.append(curr_pos)
                     if curr_node.fcost < lowest_cost:
                         lowest_fcords.clear()
                         lowest_fcords.append(curr_pos)
                         lowest_cost = curr_node.fcost
                     elif curr_node.fcost == lowest_cost:
                         lowest_fcords.append(curr_pos)
-
+                        
         return lowest_fcords
 
 

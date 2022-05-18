@@ -1,5 +1,5 @@
-from node import Node
-from vec2int import Vec2Int
+from ghosts.node import Node
+from ghosts.vec2int import Vec2Int
 
 class Node_grid:
     # Grid made for (y, x) coordinates
@@ -16,3 +16,10 @@ class Node_grid:
     # Initialization functions
     def create_grid(self, grid: list[list[int]]):
         self.node_grid = [[Node(grid[y][x] != 1) for x in range(len(grid[0]))] for y in range(len(grid))]
+
+
+    # Clear grid
+    def clear(self):
+        for y in range(self.height):
+            for x in range(self.width):
+                self.node_grid[y][x].clear()
