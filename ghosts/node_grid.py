@@ -6,10 +6,13 @@ class Node_grid:
 
     def __init__(self, grid: list[list[int]]):
         self.create_grid(grid)
+        self.width = len(self.node_grid[0])
+        self.height = len(self.node_grid)
+        self.size = self.width * self.height
     
     def get_node(self, pos: Vec2Int):
         return self.node_grid[pos.y][pos.x]
     
     # Initialization functions
     def create_grid(self, grid: list[list[int]]):
-        self.node_grid = [[Node(grid[y][x] != 1) for y in range(len(grid))] for x in range(len(grid[0]))]
+        self.node_grid = [[Node(grid[y][x] != 1) for x in range(len(grid[0]))] for y in range(len(grid))]

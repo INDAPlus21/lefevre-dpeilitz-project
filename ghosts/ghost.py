@@ -13,13 +13,17 @@ class Ghost:
         self.pathfinder = Pathfinder()
     def update(self, delta_time: float, player_pos: Vec2Int):
         # Non-Scatter mode
-        self.dir = self.find_dir(player_pos: Vec2Int)
+        self.dir = self.find_new_dir(player_pos)
 
 
         self.move()
 
     # Helper methods
-    def find_dir(self, target):
-        next_node = self.pathfinder.find_path(player_pos)[1]
+    def find_new_dir(self, target):
+        # Select second node in path (aka the one after start)
+        next_node_pos = self.pathfinder.find_path(target)[1]
+        self.dir = next_node_pos - self.get_grid_pos()
     def move(self):
-        
+        pass
+    def get_grid_pos(self):
+        pass
