@@ -1,6 +1,8 @@
 import pygame
 from constants import *
 from player import Player
+from ghosts.ghost import Ghost
+from ghosts.vec2int import Vec2Int
 vec = pygame.math.Vector2
 
 
@@ -54,6 +56,7 @@ class Pacman(object):
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ]
         self.player = Player(self.grid, self.init_pacman())
+        self.ghost = Ghost(Vec2Int(TILELENGTH, TILELENGTH), self.grid)
 
     def run(self):
         while self.running:
@@ -80,6 +83,7 @@ class Pacman(object):
         self.clock.tick(FPS)
         self.player.update()
         self.grid = self.player.grid
+        self.ghost.update(1, Vec2Int(int(self.player.grid_position.x), int(self.player.grid_position.y)))
         self.checkEvents()
         self.render()
 
@@ -92,6 +96,7 @@ class Pacman(object):
         self.screen.blit(self.background, (0, 0))
         self.player.render(self.screen)
         self.draw_grid()
+        self.ghost.draw(self.screen)
         text = self.font.render("SCORE: " + str(self.player.score), False, WHITE)
         self.screen.blit(text, (100,500))
 
