@@ -7,6 +7,13 @@ class Pathfinder:
 
     # Actual pathfinding
     def find_path(self, start_pos: Vec2Int, target_pos: Vec2Int) -> list[Vec2Int]:
+        # Warn if invalid target_pos
+        if self.node_grid.get_node(target_pos).passable == False:
+            print("WARNING: Target node is not passable")
+        # Warn if invalid start_pos
+        if self.node_grid.get_node(start_pos).passable == False:
+            print("WARNING: Start node is not passable")
+        
         # Update starting node
         self.node_grid.get_node(start_pos).update(0, self.dist_to_point(start_pos, target_pos) * 10, start_pos)
 
