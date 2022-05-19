@@ -1,9 +1,9 @@
 import pygame
 
 class Vec2Int:
-    def __init__(self, x: int, y: int, vec = None):
-        self.x = x
-        self.y = y
+    def __init__(self, x: int, y: int):
+        self.x = int(x)
+        self.y = int(y)
     
 
     def __eq__(self, other_vec):

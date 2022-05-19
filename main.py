@@ -34,6 +34,7 @@ class Game(object):
         self.setBackground()
 
         while self.running:
+            self.clock.tick(FPS)
             # print(self.state)
             if self.state == 'start':
                 self.check_events()
@@ -41,13 +42,15 @@ class Game(object):
                 # print("wewo")
 
             elif self.state == 'playing':
-                self.update()
+                self.update(1)
                 self.render_play()
                 self.check_events()
                 # print("fasen")
 
             elif self.state == 'paused':
                 self.check_events()
+            
+            pygame.display.update()
 
         pygame.quit()
 
@@ -62,13 +65,10 @@ class Game(object):
                     return vec(y, x)
                 
 
-    def update(self):
-        self.clock.tick(FPS)
-
-        # Update game objects
+    def update(self, delta_time: float):
         self.player.update()
         self.grid = self.player.grid
-        self.ghost.update(1, Vec2Int(int(self.player.grid_position.x), int(self.player.grid_position.y)))
+        self.ghost.update(delta_time, Vec2Int(self.player.grid_position.x, self.player.grid_position.y))
 
     def check_events(self):
         for event in pygame.event.get():
@@ -105,15 +105,14 @@ class Game(object):
         self.draw_grid()
         self.player.render(self.screen)
         self.ghost.draw(self.screen)
+        
         text = self.font.render("SCORE: " + str(self.player.score), False, WHITE)
-        self.screen.blit(text, (100,500))
-        pygame.display.update()
+        self.screen.blit(text, (SCREENWIDTH/18, 10.65*SCREENHEIGHT/12))
+        
 
     def render_start(self):
-        self.clock.tick(FPS)
-        text = self.font.render("PRESS SPACE BAR", False, WHITE)
+        text = self.font.render("PRESS SPACE BAR", False, CERISE)
         self.screen.blit(text, (SCREENWIDTH/6, SCREENHEIGHT/2))
-        pygame.display.update()
 
 
 if __name__ == "__main__":
