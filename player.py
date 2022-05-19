@@ -9,10 +9,11 @@ class Player:
         self.grid = grid
         self.grid_position = pos
         self.prev_pos = pos
+
         self.pxl_pos = vec(self.grid_position.y * TILELENGTH + TILELENGTH/2, self.grid_position.x * TILELENGTH + TILELENGTH/2 )
         print(self.pxl_pos / TILELENGTH)
         self.direction = vec(-1, 0)
-        self.speed = 1
+        self.speed = 2
         self.radius = TILELENGTH / 2.1
         self.color = YELLOW
         self.stored_direction = None
@@ -38,8 +39,7 @@ class Player:
         self.move_grid()
         #print(self.pxl_pos / TILELENGTH)
 
-
-        direction = self.get_keypress(self.direction)
+        direction = self.get_dir(self.direction)
 
         #Collision handling 
         if self.collision(direction) and direction != self.direction:
@@ -56,7 +56,7 @@ class Player:
             self.direction = vec(0,0)
 
 
-    def get_keypress(self, prev_dir):
+    def get_dir(self, prev_dir):
         key_pressed = pygame.key.get_pressed()
         if key_pressed[pygame.K_UP]:
             return vec(0, -1)
