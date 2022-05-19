@@ -17,6 +17,9 @@ vec = pygame.math.Vector2
 class Pacman(object):
     def __init__(self):
         pygame.init()
+
+        self.font = pygame.font.SysFont("Comic Sans MS", 30)
+        self.state = 'start'
         self.screen = pygame.display.set_mode(SCREENSIZE, 0, 32)
         self.background = None
         self.clock = pygame.time.Clock()
@@ -27,16 +30,28 @@ class Pacman(object):
 
     def run(self):
         while self.running:
-            self.checkEvents()
-            self.update()
-            self.render()
+            print(self.state)
+            if self.state == 'start':
+                self.check_events()
+                self.start_render()
+                print("wewo")
+
+            elif self.state == 'playing':
+                self.update()
+                self.render()
+                self.check_events()
+                print("fasen")
+
+            elif self.state == 'paused':
+                self.check_events()
+
         pygame.quit()
 
     def setBackground(self):
         self.background = pygame.surface.Surface(SCREENSIZE).convert()
         self.background.fill(BLACK)
 
-    def startGame(self):
+    def start_game(self):
         self.setBackground()
     
     def init_pacman(self):
@@ -53,21 +68,28 @@ class Pacman(object):
         self.player.update()
         self.grid = self.player.grid
         self.ghost.update(1, Vec2Int(int(self.player.grid_position.x), int(self.player.grid_position.y)))
-
+        
         # Game logic
         self.checkEvents()
         self.render()
 
-    def checkEvents(self):
+    def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                if self.state == "playing":
+                    self.state = 'paused'
+                else:
+                    self.state = 'playing'  
 
     def render(self):
         self.screen.blit(self.background, (0, 0))
         self.draw_grid()
         self.player.render(self.screen)
         self.ghost.draw(self.screen)
+        text = self.font.render("SCORE: " + str(self.player.score), False, WHITE)
+        self.screen.blit(text, (100,500))
 
         pygame.display.update()
 
@@ -85,11 +107,19 @@ class Pacman(object):
                 # Draw Candy
                 if self.grid[y][x] == 3:
                     pygame.draw.circle(self.screen, WHITE, (x*TILELENGTH + TILELENGTH/2, y*TILELENGTH + TILELENGTH/2), TILELENGTH / 6)
+                # Draw super candy
+                if self.grid[y][x] == 4:
+                    pygame.draw.circle(self.screen, YELLOW, (x*TILELENGTH + TILELENGTH/2, y*TILELENGTH + TILELENGTH/2), TILELENGTH / 3)
 
+    def start_render(self):
+        self.clock.tick(FPS)
+        text = self.font.render("PRESS SPACE BAR", False, WHITE)
+        self.screen.blit(text, (SCREENWIDTH/6, SCREENHEIGHT/2))
+        pygame.display.update()
 
 
 if __name__ == "__main__":
     game = Pacman()
-    game.startGame()
+    game.start_game()
     while True:
-        game.update()
+        game.run()
