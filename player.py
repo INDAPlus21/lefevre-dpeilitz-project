@@ -1,5 +1,7 @@
 import pygame
+
 from constants import *
+
 vec = pygame.math.Vector2
 
 class Player:
@@ -11,7 +13,7 @@ class Player:
         print(self.pxl_pos / TILELENGTH)
         self.direction = vec(-1, 0)
         self.speed = 1
-        self.radius = 8
+        self.radius = TILELENGTH / 2.1
         self.color = YELLOW
         self.stored_direction = None
         self.score = 0
