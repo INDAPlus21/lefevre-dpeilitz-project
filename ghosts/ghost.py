@@ -16,11 +16,12 @@ class Ghost:
 
         self.radius = TILELENGTH / 2
         self.color = RED
-        self.speed = 1
+        self.speed = 2
         self.dir = Vec2Int(1, 0)
         self.pathfinder = Pathfinder(grid)
         
         self.last_target_pos = Vec2Int(0, 0)
+        self.last_grid_pos = Vec2Int(0, 0)
 
 
     # Called every frame of the game
@@ -40,19 +41,22 @@ class Ghost:
     ## Helper methods ##
     def find_new_dir(self, target):
         
+        curr_grid_pos = self.get_grid_pos()
+
         # Check if player has the same grid coordinates as last frame 
         # to reduce unnecessary computing
-        if target == self.last_target_pos:
+        if target == self.last_target_pos and curr_grid_pos == self.last_grid_pos:
             return self.dir
 
         # Select second node in path (aka the one after start)  
-        path_to_target = self.pathfinder.find_path(self.get_grid_pos(), target)
+        path_to_target = self.pathfinder.find_path(curr_grid_pos, target)
         next_node_pos = Vec2Int(0, 0)
         if len(path_to_target) > 1:
             next_node_pos = path_to_target[1]
 
         self.last_target_pos = target
-        return next_node_pos - self.get_grid_pos()
+        self.last_grid_pos = curr_grid_pos
+        return next_node_pos - curr_grid_pos
 
 
     # Move the entity in the direction of its choice
