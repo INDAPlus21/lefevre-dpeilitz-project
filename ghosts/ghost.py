@@ -1,15 +1,18 @@
 import pygame
+
 from ghosts.pathfinder import Pathfinder
 from ghosts.vec2int import Vec2Int
 from constants import *
+
 vec = pygame.math.Vector2
 
 
 class Ghost:
 
-    def __init__(self, pos: Vec2Int, grid: list[list[int]]):
+    def __init__(self, grid: list[list[int]], spawn_point: Vec2Int):
         self.grid = grid
-        self.pos = pos
+        self.spawn_point = spawn_point
+        self.pos = spawn_point
 
         self.radius = TILELENGTH / 2
         self.color = RED
