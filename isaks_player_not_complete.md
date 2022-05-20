@@ -133,3 +133,49 @@ if self.check_if_in_wall(new_dir) and new_dir != self.dir:
             self.dir = vec(0,0)
 
 """
+
+
+
+
+
+
+
+EVEN MORE NOT COMPLETED:
+
+
+
+    # Returns the movement vector so that it doesn't go through walls
+    def hits_wall(self, move_vec: vec, walls: list[Wall]):
+        new_hb = rect(move_vec.x, move_vec.y, TILELENGTH, TILELENGTH)
+        for i in range(len(walls)):
+            wall_hb = walls[i].hitbox
+
+            if new_hb.colliderect(wall_hb):
+                print("new: ", new_hb, "wall: ", wall_hb)
+
+                # Collide with wall to the right of entity
+                if new_hb.left < wall_hb.right and int(self.dir.x) == -1:
+                    # Calculate how far into the wall the entity is
+                    coll_dist = wall_hb.right - new_hb.left
+                    # Recalculate move_vec to prevent collision
+                    move_vec = vec(move_vec.x + coll_dist, move_vec.y)
+
+        return move_vec
+"""
+(new_hb.left >= wall_hb.right or new_hb.top >= wall_hb.bottom or new_hb.right <= wall_hb.left or new_hb.bottom <= wall_hb.top) == False
+                # Collide with wall above entity
+                if (new_hb.top >= wall_hb.bottom) == False:
+                    coll_dist = new_hb.top - wall_hb.bottom
+                    move_vec = vec(move_vec.x, move_vec.y + coll_dist)
+
+                # Collide with wall to the right of entity
+                if (new_hb.right <= wall_hb.left) == False:
+                    coll_dist = new_hb.right - wall_hb.left
+                    move_vec = vec(move_vec.x + coll_dist, move_vec.y)
+
+                # Collide with wall below entity
+                if (new_hb.bottom <= wall_hb.top) == False:
+                    coll_dist = new_hb.bottom - wall_hb.top
+                    move_vec = vec(move_vec.x, move_vec.y + coll_dist)
+"""
+        

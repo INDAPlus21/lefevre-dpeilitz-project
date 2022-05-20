@@ -1,6 +1,6 @@
 import pygame
 
-from constants import *
+from oo_game.constants import *
 
 vec = pygame.math.Vector2
 

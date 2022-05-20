@@ -1,4 +1,4 @@
-from ghosts.vec2int import Vec2Int
+from vec2int import Vec2Int
 
 class Node:
     def __init__(self, passable: bool):

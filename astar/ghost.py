@@ -2,7 +2,7 @@ import pygame
 
 from ghosts.pathfinder import Pathfinder
 from ghosts.vec2int import Vec2Int
-from constants import *
+from const import *
 
 vec = pygame.math.Vector2
 

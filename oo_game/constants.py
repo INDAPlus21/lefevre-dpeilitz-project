@@ -29,7 +29,7 @@ CERISE = (238, 42, 123)
 
 # OTHER
 WALL = 1
-PACMAN = 2
+PLAYER = 2
 CANDY = 3
 SUPER_CANDY = 4
 GHOST_BASIC = 5
@@ -37,7 +37,7 @@ GHOST_RED = 6
 GHOST_CYAN = 7
 GHOST_PINK = 8
 GHOST_ORANGE = 9
-PACMAN_GRID = [
+GAME_GRID = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1],
             [1, 3, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 3, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 3, 1],

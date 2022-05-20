@@ -1,5 +1,5 @@
-from ghosts.node_grid import Node_grid
-from ghosts.vec2int import Vec2Int
+from node_grid import Node_grid
+from vec2int import Vec2Int
 
 class Pathfinder:
     def __init__(self, grid: list[list[int]]):

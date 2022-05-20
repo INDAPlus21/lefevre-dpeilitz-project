@@ -6,15 +6,15 @@ from pathfinder import Pathfinder
 
 
 grid = [
-    [9, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
-    [0, 1, 1, 0, 1, 1, 1, 1, 1, 0],
-    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-    [0, 1, 1, 0, 1, 0, 0, 0, 0, 0],
-    [0, 1, 0, 0, 0, 0, 1, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-    [0, 1, 1, 1, 1, 1, 1, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [9, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+    [1, 1, 1, 0, 1, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 1, 1, 1, 0],
+    [0, 1, 0, 1, 1, 1, 1, 0, 0, 0],
+    [0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 1, 0, 1, 0, 0],
+    [0, 0, 0, 1, 0, 1, 0, 1, 1, 1],
+    [0, 1, 0, 0, 0, 1, 0, 0, 1, 0],
+    [0, 1, 1, 1, 0, 1, 1, 0, 1, 1],
     [8, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
@@ -45,20 +45,35 @@ def draw_grid(grid: list[list[int]]):
                 draw_rect(x, y, YELLOW)
 
 
-pf = Pathfinder(grid)
-path = pf.find_path(Vec2Int(0, 9), Vec2Int(0, 0))
-for i in range(len(path)):
-    grid[path[i].y][path[i].x] = 2
+def calc_new_path(target_pos: Vec2Int) -> list[list[int]]:
+    new_grid = [[grid[y][x] for x in range(10)] for y in range(10)]
+    
+    pf = Pathfinder(grid)
+    path = pf.find_path(Vec2Int(0, 9), target_pos)
+    new_grid[target_pos.y][target_pos.x] = 9
+    for i in range(1, len(path) - 1):
+        new_grid[path[i].y][path[i].x] = 2
 
-vec1 = Vec2Int(1, 1)
-vec2 = Vec2Int(2, 0)
+    return new_grid
+
+new_grid = calc_new_path(Vec2Int(0, 0))
+grid[0][0] = 0
 
 # Start game loop
 running = True
 while running:
+    screen.blit(background, (0, 0))
+
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
             running = False
 
-    draw_grid(grid)
+        mouse_pos = pygame.mouse.get_pos()
+        mouse_vec = Vec2Int(mouse_pos[0] // BOXSIZE, mouse_pos[1] // BOXSIZE)
+
+        if grid[mouse_vec.y][mouse_vec.x] != 1:
+            new_grid = calc_new_path(mouse_vec)
+            
+
+    draw_grid(new_grid)
     pygame.display.update()

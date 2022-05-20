@@ -1,7 +1,7 @@
 import pygame
 
-from constants import *
-from player import Player
+from oo_game.constants import *
+from old_player import Player
 from ghosts.ghost import Ghost
 from ghosts.vec2int import Vec2Int
 
@@ -28,7 +28,7 @@ class Game(object):
         self.background = None
         self.state = 'start'
         self.running = True
-        self.grid  = PACMAN_GRID
+        self.grid  = GAME_GRID
         self.game_objects = []
 
         self.player = Player(self.grid, self.init_pacman())

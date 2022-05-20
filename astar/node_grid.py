@@ -1,5 +1,5 @@
-from ghosts.node import Node
-from ghosts.vec2int import Vec2Int
+from node import Node
+from vec2int import Vec2Int
 
 class Node_grid:
     # Grid made for (y, x) coordinates
