@@ -10,7 +10,6 @@ class Player:
         self.grid_position = pos
         self.prev_pos = pos
         self.pxl_pos = vec(self.grid_position.y * TILELENGTH + TILELENGTH/2, self.grid_position.x * TILELENGTH + TILELENGTH/2 )
-        print(self.pxl_pos / TILELENGTH)
         self.direction = vec(0,0)
         self.speed = 1
         self.radius = TILELENGTH / 2.1
@@ -26,22 +25,24 @@ class Player:
         else:
                 self.direction = vec(0,0)
 
-
+        #check if on center of tile
         if (self.pxl_pos.x / TILELENGTH - 0.5).is_integer():
-            if self.stored_direction != None:
-                if self.collision(self.stored_direction) == False:
-                    self.direction = self.stored_direction
-                    self.stored_direction = None
-                    print("wat")
+            if self.direction != LEFT or self.direction != RIGHT:
+                if self.stored_direction != None:
+                    if self.collision(self.stored_direction) == False:
+                        self.direction = self.stored_direction
+                        self.stored_direction = None
+        
             self.grid_position.x = self.pxl_pos.x / TILELENGTH
 
 
         if (self.pxl_pos.y / TILELENGTH - 0.5).is_integer():
-            if self.stored_direction != None:
-                if self.collision(self.stored_direction) == False:
-                    self.direction = self.stored_direction
-                    self.stored_direction = None
-                    print("water")
+            if self.direction != UP or self.direction != DOWN:
+                if self.stored_direction != None:
+                    if self.collision(self.stored_direction) == False:
+                        self.direction = self.stored_direction
+                        self.stored_direction = None
+                    
             self.grid_position.y = (self.pxl_pos.y / TILELENGTH)
 
         
@@ -75,23 +76,20 @@ class Player:
     def render(self, screen):
         p = (self.pxl_pos.x , self.pxl_pos.y)
         pygame.draw.circle(screen, self.color, p, self.radius)
-        pygame.draw.rect(screen, RED, ((self.grid_position.x-0.5)*TILELENGTH, (self.grid_position.y-0.5)*TILELENGTH,
-                                TILELENGTH, TILELENGTH), 1)
 
+    #Lagd på is
     def move_grid(self):
-        if self.prev_pos != self.grid_position:
-            xval = int(self.prev_pos.x)
-            yval = int(self.prev_pos.y)
+        xval = int(self.prev_pos.x)
+        yval = int(self.prev_pos.y)
 
-            #Score points 
-            if self.grid[int(self.grid_position.y)][int(self.grid_position.x)] == 3:
-                self.score += 10
-            if self.grid[int(self.grid_position.y)][int(self.grid_position.x)] == 4:
-                self.score += 50
+        #Score points 
+        if self.grid[int(self.grid_position.y)][int(self.grid_position.x)] == 3:
+            self.score += 10
+            self.grid[int(self.grid_position.y)][int(self.grid_position.x)] = 0
+        if self.grid[int(self.grid_position.y)][int(self.grid_position.x)] == 4:
+            self.score += 50
+            self.grid[int(self.grid_position.y)][int(self.grid_position.x)] = 0
             
-            self.grid[yval][xval] = 0
-            self.grid[int(self.grid_position.y)][int(self.grid_position.x)] = 2
-            self.prev_pos = self.grid_position
 
 
     #check the tile pacman is currently on is a wall, returns false otherwise

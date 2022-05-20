@@ -97,6 +97,12 @@ class Game(object):
         self.player.update()
         self.grid = self.player.grid
         self.ghost.update(delta_time, Vec2Int(self.player.grid_position.x, self.player.grid_position.y))
+        self.check_gameover()
+
+    def check_gameover(self):
+
+        if self.player.grid_position.x - 0.5 == self.ghost.get_grid_pos().x and self.player.grid_position.y - 0.5 == self.ghost.get_grid_pos().y:
+            exit()
 
     def check_events(self):
         for event in pygame.event.get():
@@ -108,7 +114,7 @@ class Game(object):
                 if self.state == "playing":
                     self.state = 'paused'
                 else:
-                    self.state = 'playing'  
+                    self.state = 'playing'
 
     def draw_grid(self):
         for x in range(COLS):
@@ -118,9 +124,6 @@ class Game(object):
                 if self.grid[y][x] == 1:
                     pygame.draw.rect(self.screen, BLUE, (x*TILELENGTH, y*TILELENGTH,
                                 TILELENGTH, TILELENGTH))
-                if self.grid[y][x] == 2:
-                    pygame.draw.rect(self.screen, RED, (x*TILELENGTH, y*TILELENGTH,
-                                TILELENGTH, TILELENGTH), 1)
                 # Draw Candy
                 if self.grid[y][x] == 3:
                     pygame.draw.circle(self.screen, WHITE, (x*TILELENGTH + TILELENGTH/2, y*TILELENGTH + TILELENGTH/2), TILELENGTH / 6)
@@ -141,7 +144,6 @@ class Game(object):
     def render_start(self):
         text = self.font.render("PRESS SPACE BAR", False, CERISE)
         self.screen.blit(text, (SCREENWIDTH/6, SCREENHEIGHT/2))
-
 
 if __name__ == "__main__":
     game = Game()
