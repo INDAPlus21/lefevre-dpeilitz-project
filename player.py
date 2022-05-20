@@ -19,7 +19,8 @@ class Player:
         self.score = 0
 
     def update(self):
-        print(self.grid_position)
+
+        #Movement forwards and backwards
         if self.collision(self.direction) == False:
             self.pxl_pos += self.direction*self.speed
         else:
@@ -27,18 +28,21 @@ class Player:
 
 
         if (self.pxl_pos.x / TILELENGTH - 0.5).is_integer():
-            self.grid_position.x = self.pxl_pos.x / TILELENGTH
             if self.stored_direction != None:
                 if self.collision(self.stored_direction) == False:
                     self.direction = self.stored_direction
                     self.stored_direction = None
+                    print("wat")
+            self.grid_position.x = self.pxl_pos.x / TILELENGTH
+
 
         if (self.pxl_pos.y / TILELENGTH - 0.5).is_integer():
-            self.grid_position.y = (self.pxl_pos.y / TILELENGTH)
             if self.stored_direction != None:
                 if self.collision(self.stored_direction) == False:
                     self.direction = self.stored_direction
                     self.stored_direction = None
+                    print("water")
+            self.grid_position.y = (self.pxl_pos.y / TILELENGTH)
 
         
         self.move_grid()
@@ -71,6 +75,8 @@ class Player:
     def render(self, screen):
         p = (self.pxl_pos.x , self.pxl_pos.y)
         pygame.draw.circle(screen, self.color, p, self.radius)
+        pygame.draw.rect(screen, RED, ((self.grid_position.x-0.5)*TILELENGTH, (self.grid_position.y-0.5)*TILELENGTH,
+                                TILELENGTH, TILELENGTH), 1)
 
     def move_grid(self):
         if self.prev_pos != self.grid_position:
@@ -90,7 +96,6 @@ class Player:
 
     #check the tile pacman is currently on is a wall, returns false otherwise
     def collision(self, dir):
-         print(dir.y)
          xval = self.pxl_pos.x + (dir.x * TILELENGTH) 
          yval = self.pxl_pos.y + (dir.y * TILELENGTH)
          x_wall = int((self.grid_position.x + dir.x)) 
