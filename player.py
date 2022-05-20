@@ -11,7 +11,7 @@ class Player:
         self.prev_pos = pos
         self.pxl_pos = vec(self.grid_position.y * TILELENGTH + TILELENGTH/2, self.grid_position.x * TILELENGTH + TILELENGTH/2 )
         print(self.pxl_pos / TILELENGTH)
-        self.direction = vec(-1, 0)
+        self.direction = vec(0,0)
         self.speed = 1
         self.radius = TILELENGTH / 2.1
         self.color = YELLOW
@@ -19,44 +19,42 @@ class Player:
         self.score = 0
 
     def update(self):
-        self.pxl_pos += self.direction*self.speed
-        
-        # if self.direction == (0,1) or self.direction == (1,0):
-        #     self.grid_position = vec((self.pxl_pos.x) // TILELENGTH  , (self.pxl_pos.y) // TILELENGTH)
-        #     #self.grid_position = vec((self.pxl_pos.x + TILELENGTH / 2) // TILELENGTH  , (self.pxl_pos.y + TILELENGTH / 2) // TILELENGTH)
+        print(self.grid_position)
+        if self.collision(self.direction) == False:
+            self.pxl_pos += self.direction*self.speed
+        else:
+                self.direction = vec(0,0)
 
-        # if self.direction == (0,-1) or self.direction == (-1,0):
-        #     #self.grid_position = vec((self.pxl_pos.x +  TILELENGTH / 2) // TILELENGTH  , (self.pxl_pos.y + TILELENGTH / 2) // TILELENGTH)
-        #     self.grid_position = vec((self.pxl_pos.x) // TILELENGTH  , (self.pxl_pos.y) // TILELENGTH)
 
         if (self.pxl_pos.x / TILELENGTH - 0.5).is_integer():
             self.grid_position.x = self.pxl_pos.x / TILELENGTH
+            if self.stored_direction != None:
+                if self.collision(self.stored_direction) == False:
+                    self.direction = self.stored_direction
+                    self.stored_direction = None
 
         if (self.pxl_pos.y / TILELENGTH - 0.5).is_integer():
             self.grid_position.y = (self.pxl_pos.y / TILELENGTH)
+            if self.stored_direction != None:
+                if self.collision(self.stored_direction) == False:
+                    self.direction = self.stored_direction
+                    self.stored_direction = None
 
+        
         self.move_grid()
-        #print(self.pxl_pos / TILELENGTH)
+        
+        dir = self.get_dir(self.direction)
+        if dir != self.direction:
 
-
-        direction = self.get_keypress(self.direction)
-
-        #Collision handling 
-        if self.collision(direction) and direction != self.direction:
-            self.stored_direction = direction
-
-        if self.stored_direction != None :
-            if self.collision(self.stored_direction) == False:
-                self.direction = self.stored_direction
+            if (self.direction == LEFT or self.direction == RIGHT) and (dir == UP or dir == DOWN):
+                self.stored_direction = dir
+            elif (self.direction == UP or self.direction == DOWN) and (dir == LEFT or dir== RIGHT):
+                self.stored_direction = dir
+            else:
+                self.direction = dir
                 self.stored_direction = None
-        else:
-            self.direction = direction
-            
-        if self.collision(self.direction):
-            self.direction = vec(0,0)
 
-
-    def get_keypress(self, prev_dir):
+    def get_dir(self, prev_dir):
         key_pressed = pygame.key.get_pressed()
         if key_pressed[pygame.K_UP]:
             return vec(0, -1)
@@ -76,14 +74,12 @@ class Player:
 
     def move_grid(self):
         if self.prev_pos != self.grid_position:
-            print("wat")
             xval = int(self.prev_pos.x)
             yval = int(self.prev_pos.y)
 
             #Score points 
             if self.grid[int(self.grid_position.y)][int(self.grid_position.x)] == 3:
                 self.score += 10
-                print(self.score)
             if self.grid[int(self.grid_position.y)][int(self.grid_position.x)] == 4:
                 self.score += 50
             
@@ -94,13 +90,13 @@ class Player:
 
     #check the tile pacman is currently on is a wall, returns false otherwise
     def collision(self, dir):
-         xval = int((self.grid_position.x + dir.x)* TILELENGTH) 
-         yval = int((self.grid_position.y + dir.y) * TILELENGTH)
+         print(dir.y)
+         xval = self.pxl_pos.x + (dir.x * TILELENGTH) 
+         yval = self.pxl_pos.y + (dir.y * TILELENGTH)
          x_wall = int((self.grid_position.x + dir.x)) 
          y_wall = int((self.grid_position.y + dir.y))
          
          if self.grid[y_wall][x_wall] == 1:
-
             return True
          else:
             return False

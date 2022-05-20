@@ -5,6 +5,10 @@ from player import Player
 from ghosts.ghost import Ghost
 from ghosts.vec2int import Vec2Int
 
+"""
+from food import Food
+from wall import Wall
+"""
 vec = pygame.math.Vector2
 
 
@@ -25,6 +29,7 @@ class Game(object):
         self.state = 'start'
         self.running = True
         self.grid  = PACMAN_GRID
+        self.game_objects = []
 
         self.player = Player(self.grid, self.init_pacman())
         self.ghost = Ghost(self.grid, Vec2Int(TILELENGTH, TILELENGTH))
@@ -35,17 +40,14 @@ class Game(object):
 
         while self.running:
             self.clock.tick(FPS)
-            # print(self.state)
             if self.state == 'start':
                 self.check_events()
                 self.render_start()
-                # print("wewo")
 
             elif self.state == 'playing':
                 self.update(1)
                 self.render_play()
                 self.check_events()
-                # print("fasen")
 
             elif self.state == 'paused':
                 self.check_events()
@@ -63,6 +65,32 @@ class Game(object):
             for y in range(ROWS):
                 if self.grid[y][x] == 2:
                     return vec(y, x)
+                    
+    """ 
+    borde väl fungera som initiering? får circular import så vette tusan   
+
+    def init_grid(self):
+        for x in range(COLS):
+            for y in range(ROWS):
+                if self.grid[y][x] == WALL:
+                    self.game_objects.append(Wall(self.grid, vec(y,x)))
+                if self.grid[y][x] == PACMAN:
+                    self.game_objects.append(self.player)
+                if self.grid[y][x] == CANDY:
+                    self.game_objects.append(Food(self.grid, vec(y,x)))
+                if self.grid[y][x] == SUPER_CANDY:
+                    self.game_objects.append(Food(self.grid, vec(y,x)))
+                if self.grid[y][x] == GHOST_BASIC:
+                    self.game_objects.append(Ghost(self.grid, vec(y,x)))
+                if self.grid[y][x] == GHOST_RED:
+                    self.game_objects.append(Ghost(self.grid, vec(y,x)))
+                if self.grid[y][x] == GHOST_CYAN:
+                    self.game_objects.append(Ghost(self.grid, vec(y,x)))
+                if self.grid[y][x] == GHOST_PINK:
+                    self.game_objects.append(Ghost(self.grid, vec(y,x)))
+                if self.grid[y][x] == GHOST_ORANGE:
+                    self.game_objects.append(Ghost(self.grid, vec(y,x))) 
+    """
                 
 
     def update(self, delta_time: float):

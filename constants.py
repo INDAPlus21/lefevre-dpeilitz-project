@@ -1,3 +1,5 @@
+import pygame
+vec = pygame.math.Vector2
 # Graphics
 
 # Screen
@@ -10,6 +12,12 @@ SCREENHEIGHT = ROWS * TILELENGTH + SCORELENGTH
 SCREENSIZE = (SCREENWIDTH, SCREENHEIGHT)
 FPS = 60
 
+
+#DIRECTIONS 
+UP =vec(0,-1)
+DOWN =vec(0,1)
+LEFT =vec(-1,0)
+RIGHT =vec(1,0)
 # Colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -20,7 +28,7 @@ BLUE = (0, 0, 255)
 CERISE = (238, 42, 123)
 
 # OTHER
-
+WALL = 1
 PACMAN = 2
 CANDY = 3
 SUPER_CANDY = 4
