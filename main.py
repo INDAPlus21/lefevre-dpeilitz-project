@@ -1,5 +1,6 @@
 import pygame
 
+from math import sqrt
 from constants import *
 from player import Player
 from ghosts.ghost import Ghost
@@ -100,9 +101,10 @@ class Game(object):
         self.check_gameover()
 
     def check_gameover(self):
-
-        if self.player.grid_position.x - 0.5 == self.ghost.get_grid_pos().x and self.player.grid_position.y - 0.5 == self.ghost.get_grid_pos().y:
-            exit()
+        #if self.player.grid_position.x - 0.5 == self.ghost.get_grid_pos().x and self.player.grid_position.y - 0.5 == self.ghost.get_grid_pos().y:
+        #    exit()
+        if self.coll_circ_rect(self.player.radius, self.player.pxl_pos, pygame.Rect(self.ghost.pos.x, self.ghost.pos.y, self.ghost.side_size, self.ghost.side_size)):
+            self.state = 'paused'
 
     def check_events(self):
         for event in pygame.event.get():
@@ -144,6 +146,35 @@ class Game(object):
     def render_start(self):
         text = self.font.render("PRESS SPACE BAR", False, CERISE)
         self.screen.blit(text, (SCREENWIDTH/6, SCREENHEIGHT/2))
+
+    def coll_circ_rect(self, radius, pos: vec, rect: pygame.Rect):
+        testX = pos.x
+        testY = pos.y
+
+        # Check if circle is closest to LEFT side of rectangle
+        if pos.x < rect.x:
+            testX = rect.x
+        # Check if circle is closest to RIGHT side of rectangle
+        elif pos.x > rect.x + rect.width:
+            testX = rect.x + rect.width
+
+        # Check if circle is closest to TOP side of rectangle
+        if pos.y < rect.y:
+            testY = rect.y
+        # Check if circle is closest to BOTTOM side of rectangle
+        elif pos.y > rect.y + rect.height:
+            testY = rect.y + rect.height
+
+        # Calculate distance from closest sides to circle 
+        distX = pos.x - testX
+        distY = pos.y - testY
+        dist = sqrt((distX * distX) + (distY * distY))
+
+        if dist < radius:
+            return True
+
+        return False
+
 
 if __name__ == "__main__":
     game = Game()

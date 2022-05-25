@@ -14,7 +14,7 @@ class Ghost:
         self.spawn_point = spawn_point
         self.pos = spawn_point
 
-        self.radius = TILELENGTH / 2
+        self.side_size = TILELENGTH
         self.color = RED
         self.speed = 2
         self.dir = Vec2Int(1, 0)
@@ -27,7 +27,8 @@ class Ghost:
     # Called every frame of the game
     def update(self, delta_time: float, player_pos: Vec2Int):
         # Non-Scatter mode
-        self.dir = self.find_new_dir(player_pos)
+        new_dir = self.find_new_dir(player_pos)
+        self.dir = new_dir
 
         self.move(delta_time) 
 
@@ -35,7 +36,7 @@ class Ghost:
     # Draws the game object every frame of the game
     def draw(self, screen):
         pos = vec(self.pos.x + TILELENGTH/2, self.pos.y + TILELENGTH/2)
-        pygame.draw.circle(screen, self.color, pos, self.radius)
+        pygame.draw.rect(screen, self.color, pygame.Rect(self.pos.x, self.pos.y, self.side_size, self.side_size))
 
 
     ## Helper methods ##
@@ -56,6 +57,7 @@ class Ghost:
 
         self.last_target_pos = target_pos
         self.last_grid_pos = curr_grid_pos
+
         return next_node_pos - curr_grid_pos
 
 
